@@ -650,6 +650,9 @@ Generate creative, realistic details. Make the backstory compelling and the narr
             ).join('');
 
             const jsonString = JSON.stringify(persona, null, 2);
+            
+            // Extract first name only
+            const firstName = persona.name.split(' ')[0];
 
             resultsDiv.innerHTML = `
                 <div class="success-message">
@@ -659,7 +662,7 @@ Generate creative, realistic details. Make the backstory compelling and the narr
                 <div class="persona-card">
                     <div class="persona-header">
                         <div>
-                            <div class="persona-name">${persona.name}</div>
+                            <div class="persona-name">${firstName}</div>
                             <div class="persona-role">${persona.role} • Age ${persona.age}</div>
                         </div>
                     </div>
@@ -766,11 +769,14 @@ Generate creative, realistic details. Make the backstory compelling and the narr
 
             const persona = window.currentPersona;
             let textToCopy = '';
+            
+            // Extract first name only
+            const firstName = persona.name.split(' ')[0];
 
             if (format === 'json') {
                 textToCopy = JSON.stringify(persona, null, 2);
             } else if (format === 'markdown') {
-                textToCopy = `# ${persona.name}
+                textToCopy = `# ${firstName}
 **${persona.role}** • Age ${persona.age}
 
 ## Background
@@ -788,7 +794,7 @@ ${persona.expertise.map(skill => `- ${skill}`).join('\n')}
 ## Narrative Hook
 ${persona.narrative_hook}`;
             } else if (format === 'prompt') {
-                textToCopy = `You are ${persona.name}, a ${persona.age}-year-old ${persona.role}. ${persona.background} ${persona.motivation} You are known for: ${persona.expertise.join(', ')}. Your personality: ${persona.personality}.
+                textToCopy = `You are ${firstName}, a ${persona.age}-year-old ${persona.role}. ${persona.background} ${persona.motivation} You are known for: ${persona.expertise.join(', ')}. Your personality: ${persona.personality}.
 
 Scenario: ${persona.narrative_hook}
 
