@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year of the Red Teamer - LLM Security Testing Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #0f0f1e 100%);
+            color: #00ff88;
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #ff006e 0%, #00d9ff 100%);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 3px solid #00ff88;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,255,136,0.1) 10px,
+                rgba(0,255,136,0.1) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        h1 {
+            font-size: 3em;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 20px rgba(0,255,136,0.5);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            opacity: 0.85;
+            position: relative;
+            z-index: 1;
+            font-style: italic;
+        }
+
+        .intro-card {
+            background: rgba(0, 255, 136, 0.02);
+            border: 2px solid #00ff88;
+            border-radius: 4px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #ff00ff;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        p {
+            color: #00ff88;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .tool-card {
+            background: rgba(0, 255, 136, 0.05);
+            border: 2px solid #00ff88;
+            border-radius: 4px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            border-color: #ff00ff;
+        }
+
+        .tool-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tool-title {
+            color: #ff00ff;
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+            font-weight: bold;
+        }
+
+        .tool-description {
+            color: #00ff88;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .tool-meta {
+            color: #00ff88;
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 255, 136, 0.05);
+            border-left: 3px solid #ff00ff;
+            border-radius: 2px;
+        }
+
+        .btn-launch {
+            background: linear-gradient(135deg, #ff00ff 0%, #ef4444 100%);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+
+        .btn-launch:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+        }
+
+        .info-box {
+            background: rgba(255, 0, 255, 0.1);
+            border-left: 4px solid #ff00ff;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        .info-box strong {
+            color: #ff00ff;
+            font-size: 1.1em;
+        }
+
+        .warning-box {
+            background: rgba(255, 170, 0, 0.1);
+            border-left: 4px solid #ffaa00;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 4px;
+        }
+
+        .warning-box strong {
+            color: #ffaa00;
+            font-size: 1.1em;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #00ff88;
+            font-size: 0.9rem;
+            border-top: 1px solid #00ff88;
+            margin-top: 40px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔥 Year of the Red Teamer</h1>
+        <p class="subtitle">LLM Security Testing Tools Collection</p>
+        <p class="tagline">Building Safer AI Through Adversarial Testing</p>
+    </header>
+
+    <div class="container">
+        <div class="intro-card">
+            <h2>🎯 Welcome to the Red Team Arsenal</h2>
+            <p>This collection provides interactive tools for testing Large Language Model (LLM) security and robustness. Each tool implements research-backed techniques for identifying vulnerabilities in AI safety systems.</p>
+            
+            <div class="info-box">
+                <strong>🛡️ About This Project</strong>
+                <p style="margin-top: 10px; margin-bottom: 0;">These tools are part of the Year of the Red Teamer curriculum, designed to help security researchers, AI safety teams, and developers understand and defend against adversarial prompting techniques. All tools run entirely in your browser - your API keys and prompts never leave your device except to call the AI services you configure.</p>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 25px; text-align: center;">🔧 Available Tools</h2>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <div class="tool-icon">🔥</div>
+                <div class="tool-title">Emotional Trigger Injector</div>
+                <div class="tool-meta">
+                    <strong>Week 23:</strong> Emotional Manipulation & Urgency<br>
+                    <strong>Arc 3:</strong> Semantic Framing & Authority Bias
+                </div>
+                <div class="tool-description">
+                    Transform neutral requests into emotionally-charged attacks for LLM testing. Research shows emotional framing increases harmful LLM outputs by 300-400%. Generate variations with emotional subtext and emergency situations to test how models respond to psychological pressure.
+                    <br><br>
+                    <strong>Key Features:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>AI-powered emotional variation generation</li>
+                        <li>Two attack vectors: subtle emotional subtext and urgent emergency framing</li>
+                        <li>Compare baseline vs. manipulated requests</li>
+                        <li>One-click clipboard copy for testing</li>
+                    </ul>
+                </div>
+                <a href="emotional_trigger_injector.html" class="btn-launch">⚡ Launch Tool</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">🎭</div>
+                <div class="tool-title">Roleplay Persona Generator</div>
+                <div class="tool-meta">
+                    <strong>Week 18:</strong> Role-Play Persona Adoption<br>
+                    <strong>Arc 3:</strong> Semantic Framing & Authority Bias
+                </div>
+                <div class="tool-description">
+                    Create detailed, believable character profiles for roleplay-based jailbreak testing. Generate personas with rich backstories, motivations, and narrative hooks that strengthen attack scenarios. The more detailed the persona, the more effective the narrative frame.
+                    <br><br>
+                    <strong>Key Features:</strong>
+                    <ul style="margin-top: 8px; padding-left: 20px;">
+                        <li>11+ pre-configured role types (detective, journalist, hacker, etc.)</li>
+                        <li>AI-generated backstories and personality traits</li>
+                        <li>Compelling narrative hooks for plausible scenarios</li>
+                        <li>Export as JSON, Markdown, or ready-to-use prompts</li>
+                    </ul>
+                </div>
+                <a href="roleplay_generator.html" class="btn-launch">⚡ Launch Tool</a>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Ethical Use & Disclaimer</strong>
+            <p style="margin-top: 10px; margin-bottom: 0;">
+                These tools are designed exclusively for <strong>defensive security research and educational purposes</strong>. They help organizations understand vulnerabilities in their AI systems so they can build better safeguards. Do not use these tools to generate harmful content, circumvent safety systems for malicious purposes, or violate any terms of service. Always obtain proper authorization before testing systems you don't own. The creators assume no liability for misuse of these tools.
+            </p>
+        </div>
+
+        <div class="footer">
+            <p>🔥 Year of the Red Teamer Tools Collection</p>
+            <p style="margin-top: 5px;">Educational Resources for LLM Security Research</p>
+            <p style="margin-top: 10px; opacity: 0.6;">⚠️ For Defensive Red-Teaming & Security Research Only</p>
+        </div>
+    </div>
+</body>
+</html>
