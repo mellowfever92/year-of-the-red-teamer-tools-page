@@ -6,15 +6,15 @@ The **Technique Combiner Builder** is a standalone interactive tool for Week 35 
 
 ## Quick Start
 
-1. Visit the [Year of the Red Teamer GitHub Pages site](https://mellowfever92.github.io/year-of-the-red-teamer-tools-page/) and click the **⚡ Launch Tool** button on the **Technique Combiner Builder** card
-2. Once the tool loads, enter your **OpenRouter API key** in the **🔑 OpenRouter API Configuration** section at the top of the page
+1. Open `technique-combiner.html` in any modern browser
+2. Enter your **OpenRouter API key** in the configuration section at the top
 3. **Drag** technique cards from the left palette into the Chain Builder zone (or **double-click** to add)
 4. Review synergy scores and detection risk in the analysis panels
 5. Click **⚡ Generate Preview** to produce an AI-generated composite prompt
 
 ## Features
 
-### Technique Palette (15 Techniques)
+### Technique Palette (16 Techniques)
 
 Cards spanning five arcs, each with base ASR, mechanism description, and synergy profile:
 
@@ -24,6 +24,7 @@ Cards spanning five arcs, each with base ASR, mechanism description, and synergy
 | **Arc II** (Contextual) | Prompt Injection, Context Window Overflow, Delimiter Exploitation |
 | **Arc III** (Semantic) | Roleplay Persona, Hypothetical Framing, Research/Academic Framing, Emotional Manipulation, Likert/Survey Framing, Language Switching |
 | **Arc IV** (ICL) | Few-Shot Examples, Chain-of-Thought Hijack, Narrative Story Embedding, Pseudocode/Algorithm Wrapping |
+| **Arc V** (Optimization) | Best-of-N Sampling |
 
 ### Drag-and-Drop Chain Builder
 
@@ -55,7 +56,7 @@ Color-coded: GREEN (Low) → YELLOW (Moderate) → ORANGE (High) → RED (Critic
 
 ### Attack Preview (AI-Powered)
 
-Uses **OpenRouter** → `nousresearch/hermes-3-llama-3.1-405b` to generate a composite jailbreak prompt integrating all chained techniques.
+Uses **OpenRouter** to generate a composite jailbreak prompt integrating all chained techniques.
 
 **Controls:**
 - **Target Scenario**: Generic, Information Extraction, Instruction Override, Content Policy Evasion, Multi-Step Escalation
@@ -69,29 +70,10 @@ Uses **OpenRouter** → `nousresearch/hermes-3-llama-3.1-405b` to generate a com
 
 ### Synergy Heatmap Matrix
 
-A 15×15 color-coded matrix showing pairwise synergy scores for every technique combination. Hover for details. Darker/brighter cells indicate stronger synergy.
+A 16×16 color-coded matrix showing pairwise synergy scores for every technique combination. Hover for details. Darker/brighter cells indicate stronger synergy.
 
 ## API Requirements
 
 - **Provider**: [OpenRouter](https://openrouter.ai/)
-- **Model**: `nousresearch/hermes-3-llama-3.1-405b`
 - **Key format**: `sk-or-v1-...`
 - **Usage**: Only the Attack Preview feature requires API access. All other features (drag-drop, synergy calculation, risk meter, heatmap) work offline.
-
-## Files
-
-```
-├── index.html                       # GitHub Pages site — includes Technique Combiner Builder card
-├── technique-combiner.html          # Full interactive tool (single file, no dependencies)
-└── TECHNIQUE_COMBINER_README.md     # This file
-```
-
-## Educational Purpose
-
-This tool is designed for **defensive red team research**. Understanding how attackers compose multi-technique jailbreaks is essential for:
-- Building composite-aware classifiers
-- Training safety teams on realistic attack patterns
-- Identifying which technique combinations demand priority defense investment
-- Benchmarking detection systems against sophisticated multi-vector attacks
-
-Do not use generated outputs against systems without proper authorization.
