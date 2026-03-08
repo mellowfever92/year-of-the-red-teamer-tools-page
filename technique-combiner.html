@@ -168,6 +168,11 @@
 
         @media (max-width: 1000px) {
             .main-grid { grid-template-columns: 1fr; }
+            .palette {
+                position: static;
+                max-height: none;
+                overflow-y: visible;
+            }
         }
 
         /* --- TECHNIQUE PALETTE --- */
@@ -330,7 +335,7 @@
         }
 
         .chain-zone.empty::after {
-            content: 'Drag techniques here to build your composite chain — order matters!';
+            content: 'Tap or drag techniques here to build your composite chain — order matters!';
             color: rgba(0, 255, 136, 0.3);
             font-size: 0.9em;
             display: flex;
@@ -807,6 +812,90 @@
         ::-webkit-scrollbar-thumb { background: rgba(0, 255, 136, 0.3); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #ff00ff; }
 
+        /* --- MOBILE STYLES --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.5em; }
+            header { padding: 20px 15px; }
+            .container { padding: 10px; }
+            .week-badge { font-size: 0.7em; }
+
+            .api-row {
+                flex-direction: column;
+            }
+            .api-row input {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .chain-zone {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .chain-card {
+                max-width: none;
+                min-width: 0;
+            }
+            .chain-connector {
+                align-self: center;
+                transform: rotate(90deg);
+            }
+            .chain-card .remove-btn {
+                opacity: 1;
+            }
+
+            .analysis-grid { grid-template-columns: 1fr; }
+
+            .preview-controls {
+                flex-direction: column;
+            }
+            .control-group {
+                width: 100%;
+            }
+            .control-group select,
+            .control-group input[type="text"] {
+                width: 100%;
+            }
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .heatmap-table {
+                font-size: 0.65em;
+            }
+            .heatmap-table th,
+            .heatmap-table td {
+                padding: 4px 3px;
+                min-width: 40px;
+            }
+
+            .comp-label {
+                width: 100px;
+                font-size: 0.7em;
+            }
+
+            .risk-gauge {
+                width: 160px;
+                height: 80px;
+            }
+
+            .tech-card {
+                cursor: pointer;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.2em; }
+            h2 { font-size: 1.2em; }
+            .header-sub { font-size: 0.85em; }
+
+            .palette { padding: 10px; }
+            .panel { padding: 12px; }
+            .chain-builder { padding: 12px; }
+            .preview-section { padding: 12px; }
+            .matrix-section { padding: 12px; }
+        }
+
         /* --- TOKEN COUNTER --- */
         .token-counter {
             display: inline-flex;
@@ -825,7 +914,7 @@
 <header>
     <span class="week-badge">Week 35 · Arc V · Composite Jailbreaks</span>
     <h1>⚡ Technique Combiner Builder</h1>
-    <p class="header-sub">Drag, chain, and fuse attack techniques — then generate composite prompts with AI</p>
+    <p class="header-sub">Tap, drag, chain, and fuse attack techniques — then generate composite prompts with AI</p>
 </header>
 
 <div class="container">
@@ -1397,6 +1486,12 @@ function setupDragDrop() {
         });
         // Double-click to add
         card.addEventListener('dblclick', () => {
+            addToChain(card.dataset.techId);
+        });
+        // Single click/tap to add (mobile-friendly)
+        card.addEventListener('click', (e) => {
+            // Skip if this was a drag gesture
+            if (card.classList.contains('dragging')) return;
             addToChain(card.dataset.techId);
         });
         // Keyboard accessibility

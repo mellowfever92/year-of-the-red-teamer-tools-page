@@ -364,26 +364,38 @@
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8em;
-            }
+            h1 { font-size: 1.8em; }
+            header { padding: 25px 15px; }
+            .container { padding: 10px; }
+            .main-card { padding: 15px; }
 
             .api-input-group {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .api-input-group input {
+                min-width: 0;
                 width: 100%;
+            }
+
+            .variation-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
 
             .action-buttons {
                 flex-direction: column;
             }
-
             .action-buttons button {
                 width: 100%;
             }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.4em; }
+            h2 { font-size: 1.3em; }
+            h3 { font-size: 1.1em; }
         }
     </style>
 </head>
