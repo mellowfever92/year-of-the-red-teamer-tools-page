@@ -1484,10 +1484,6 @@ function setupDragDrop() {
         card.addEventListener('dragend', () => {
             card.classList.remove('dragging');
         });
-        // Double-click to add
-        card.addEventListener('dblclick', () => {
-            addToChain(card.dataset.techId);
-        });
         // Single click/tap to add (mobile-friendly)
         card.addEventListener('click', (e) => {
             // Skip if this was a drag gesture
