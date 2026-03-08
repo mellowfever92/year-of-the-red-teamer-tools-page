@@ -838,7 +838,7 @@
     <!-- API Config -->
     <div class="api-section">
         <h3>🔑 OpenRouter API Configuration</h3>
-        <p style="font-size:0.85em;color:#00ff88;margin-top:6px;">Required for Attack Preview generation. Your key is saved in your browser.</p>
+        <p style="font-size:0.85em;color:#00ff88;margin-top:6px;">Required for Attack Preview generation. Your key is stored only for this session.</p>
         <div class="api-row">
             <input type="password" id="apiKeyInput" placeholder="Enter your OpenRouter API key (sk-or-v1-...)" />
             <span class="api-status missing" id="apiStatus">No Key</span>
@@ -1245,8 +1245,8 @@ const $$ = (sel) => document.querySelectorAll(sel);
 
 // ── INIT ────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    // Restore saved API key
-    const savedKey = localStorage.getItem('tc_openrouter_key') || '';
+    // Restore API key from session (cleared when browser tab/window closes)
+    const savedKey = sessionStorage.getItem('tc_openrouter_key') || '';
     if (savedKey) {
         apiKey = savedKey;
         $('#apiKeyInput').value = savedKey;
@@ -1307,7 +1307,7 @@ function setupEventListeners() {
     // API key
     $('#apiKeyInput').addEventListener('input', (e) => {
         apiKey = e.target.value.trim();
-        localStorage.setItem('tc_openrouter_key', apiKey);
+        sessionStorage.setItem('tc_openrouter_key', apiKey);
         const status = $('#apiStatus');
         if (apiKey.startsWith('sk-or-')) {
             status.textContent = 'Key Set';
@@ -1327,6 +1327,7 @@ function setupEventListeners() {
         chain = [];
         renderChain();
         updateAllAnalysis();
+        invalidatePreview();
     });
 
     // Shuffle chain
@@ -1338,6 +1339,7 @@ function setupEventListeners() {
         }
         renderChain();
         updateAllAnalysis();
+        invalidatePreview();
     });
 
     // Generate
@@ -1364,6 +1366,25 @@ function setupEventListeners() {
 function setupDragDrop() {
     const zone = $('#chainZone');
 
+    // Guard: bind drop zone listeners only once
+    if (!zone.dataset.dragBound) {
+        zone.dataset.dragBound = 'true';
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+            zone.classList.add('drag-over');
+        });
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('drag-over');
+        });
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const techId = e.dataTransfer.getData('text/plain');
+            if (techId) addToChain(techId);
+        });
+    }
+
     // Palette cards: drag
     $$('.tech-card').forEach(card => {
         card.addEventListener('dragstart', (e) => {
@@ -1378,23 +1399,37 @@ function setupDragDrop() {
         card.addEventListener('dblclick', () => {
             addToChain(card.dataset.techId);
         });
+        // Keyboard accessibility
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                addToChain(card.dataset.techId);
+            }
+        });
     });
+}
 
-    // Drop zone
-    zone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'copy';
-        zone.classList.add('drag-over');
-    });
-    zone.addEventListener('dragleave', () => {
-        zone.classList.remove('drag-over');
-    });
-    zone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        zone.classList.remove('drag-over');
-        const techId = e.dataTransfer.getData('text/plain');
-        if (techId) addToChain(techId);
-    });
+function invalidatePreview() {
+    lastGeneration = null;
+    const output = $('#previewOutput');
+    if (output) {
+        output.textContent = '';
+        const placeholder = document.createElement('span');
+        placeholder.className = 'placeholder';
+        placeholder.textContent = 'Chain at least 2 techniques and enter an API key, then click Generate to create a composite attack prompt...';
+        output.appendChild(placeholder);
+        output.style.color = '';
+    }
+    const meta = $('#previewMeta');
+    if (meta) meta.textContent = '';
+    const copyBtn = $('#copyPreviewBtn');
+    if (copyBtn) copyBtn.style.display = 'none';
+    const regenBtn = $('#regenerateBtn');
+    if (regenBtn) regenBtn.style.display = 'none';
+    const exportBtn = $('#exportJsonBtn');
+    if (exportBtn) exportBtn.style.display = 'none';
 }
 
 function addToChain(techId) {
@@ -1410,12 +1445,14 @@ function addToChain(techId) {
     chain.push(techId);
     renderChain();
     updateAllAnalysis();
+    invalidatePreview();
 }
 
 function removeFromChain(index) {
     chain.splice(index, 1);
     renderChain();
     updateAllAnalysis();
+    invalidatePreview();
 }
 
 // ── CHAIN RENDERING ─────────────────────────────────────────
@@ -1482,6 +1519,7 @@ function renderChain() {
                     chain.splice(to, 0, item);
                     renderChain();
                     updateAllAnalysis();
+                    invalidatePreview();
                 }
             } else if (paletteId) {
                 addToChain(paletteId);
@@ -1876,7 +1914,8 @@ Generate the composite attack prompt now:`;
         };
         
     } catch (err) {
-        output.innerHTML = `<span style="color:#ff4444;">Error: ${err.message}</span>\n\nMake sure your OpenRouter API key is valid and has credits available.`;
+        output.textContent = `Error: ${err.message}\n\nMake sure your OpenRouter API key is valid and has credits available.`;
+        output.style.color = '#ff4444';
     }
     
     isGenerating = false;
