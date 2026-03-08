@@ -6,15 +6,15 @@ The **Technique Combiner Builder** is a standalone interactive tool for Week 35 
 
 ## Quick Start
 
-1. Open `technique-combiner.html` in any modern browser
-2. Enter your **OpenRouter API key** in the configuration section at the top
+1. Visit the [Year of the Red Teamer GitHub Pages site](https://mellowfever92.github.io/year-of-the-red-teamer-tools-page/) and click the **⚡ Launch Tool** button on the **Technique Combiner Builder** card
+2. Once the tool loads, enter your **OpenRouter API key** in the **🔑 OpenRouter API Configuration** section at the top of the page
 3. **Drag** technique cards from the left palette into the Chain Builder zone (or **double-click** to add)
 4. Review synergy scores and detection risk in the analysis panels
 5. Click **⚡ Generate Preview** to produce an AI-generated composite prompt
 
 ## Features
 
-### Technique Palette (16 Techniques)
+### Technique Palette (15 Techniques)
 
 Cards spanning five arcs, each with base ASR, mechanism description, and synergy profile:
 
@@ -24,7 +24,6 @@ Cards spanning five arcs, each with base ASR, mechanism description, and synergy
 | **Arc II** (Contextual) | Prompt Injection, Context Window Overflow, Delimiter Exploitation |
 | **Arc III** (Semantic) | Roleplay Persona, Hypothetical Framing, Research/Academic Framing, Emotional Manipulation, Likert/Survey Framing, Language Switching |
 | **Arc IV** (ICL) | Few-Shot Examples, Chain-of-Thought Hijack, Narrative Story Embedding, Pseudocode/Algorithm Wrapping |
-| **Arc V** (Optimization) | Best-of-N Sampling |
 
 ### Drag-and-Drop Chain Builder
 
@@ -70,7 +69,7 @@ Uses **OpenRouter** → `nousresearch/hermes-3-llama-3.1-405b` to generate a com
 
 ### Synergy Heatmap Matrix
 
-A 16×16 color-coded matrix showing pairwise synergy scores for every technique combination. Hover for details. Darker/brighter cells indicate stronger synergy.
+A 15×15 color-coded matrix showing pairwise synergy scores for every technique combination. Hover for details. Darker/brighter cells indicate stronger synergy.
 
 ## API Requirements
 
@@ -82,9 +81,9 @@ A 16×16 color-coded matrix showing pairwise synergy scores for every technique 
 ## Files
 
 ```
-week-35/
-├── technique-combiner.html    # Standalone tool (single file, no dependencies)
-└── TECHNIQUE_COMBINER_README.md   # This file
+├── index.html                       # GitHub Pages site — includes Technique Combiner Builder card
+├── technique-combiner.html          # Full interactive tool (single file, no dependencies)
+└── TECHNIQUE_COMBINER_README.md     # This file
 ```
 
 ## Educational Purpose
